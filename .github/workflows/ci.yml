@@ -1,0 +1,24 @@
+name: Pipeline CI Comercial Chiclayo
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  auditoria-y-pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Obtener codigo fuente
+        uses: actions/checkout@v4
+      - name: 2. Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 3. Instalar herramientas QA
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+      - name: 4. Auditar codigo completo con Flake8
+        run: |
+          flake8 src/ tests/ --max-line-length=100
+      - name: 5. Ejecutar pruebas con Pytest
+        run: |
+          pytest tests/test_facturacion_pytest.py
