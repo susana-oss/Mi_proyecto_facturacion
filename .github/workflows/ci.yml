@@ -17,62 +17,37 @@ jobs:
       - name: 2. Configurar Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-<<<<<<< HEAD
+          python-version: '3.11'
 
-=======
->>>>>>> e611d388cada466e10bb108a7ad5b3ff06575322
-      - name: 3. Instalar herramientas QA
+      - name: 3. Instalar dependencias
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest
-<<<<<<< HEAD
 
-      - name: 4. Auditar codigo con Flake8
+      - name: 4. Ejecutar auditoria estatica (Flake8)
         run: |
           flake8 src/ scripts/ --max-line-length=100
 
-      - name: 5. Ejecutar pruebas unitarias con Pytest
+      - name: 5. Ejecutar pruebas unitarias (Pytest)
         run: |
-          pytest tests/test_facturacion_pytest.py
+          pytest
 
-      - name: 6. Ejecutar script personalizado de auditoria
-        env:
-          PYTHONPATH: .
+      - name: 6. Ejecutar script de auditoria interna
         run: |
           python scripts/auditoria_sistema.py
 
-      - name: 7. Publicar artefacto de auditoria
+      - name: 7. Subir artefacto de auditoria
         uses: actions/upload-artifact@v4
         with:
           name: reporte-auditoria-calidad
           path: reporte_auditoria.txt
 
-      - name: 8. Generar resumen automatizado del build
+      - name: 8. Generar resumen ejecutivo de la ejecucion
         run: |
-          echo "## Resumen de Ejecución CI/CD - Comercial Chiclayo 🚀" >> $GITHUB_STEP_SUMMARY
-          echo "El pipeline certificó exitosamente la calidad del software:" >> $GITHUB_STEP_SUMMARY
-          echo "- **Auditoría PEP 8:** Flake8 aprobado sin observaciones." >> $GITHUB_STEP_SUMMARY
-          echo "- **Reglas de Negocio:** Pytest validó todos los cálculos contables." >> $GITHUB_STEP_SUMMARY
-          echo "- **Script Interno:** Auditoría ejecutada y empaquetada como artefacto." >> $GITHUB_STEP_SUMMARY
-          echo "- **Estado Final:** Listo para distribución continua (CD)." >> $GITHUB_STEP_SUMMARY
-      - name: 9. Ejecutar script de mantenimiento
-        env:  
-           PYTHONPATH: .
-        run: |
-          python scripts/mantenimiento_sistema.py
-
-      - name: 10. Publicar artefacto de mantenimiento
-        uses: actions/upload-artifact@v4
-        with:
-          name: reporte-mantenimiento-sistema
-          path: reporte_mantenimiento.txt
-  
-=======
-      - name: 4. Auditar codigo completo con Flake8
-        run: |
-          flake8 src/ tests/ --max-line-length=100
-      - name: 5. Ejecutar pruebas con Pytest
-        run: |
-          pytest tests/test_facturacion_pytest.py
->>>>>>> e611d388cada466e10bb108a7ad5b3ff06575322
+          echo "## 📊 Resumen de Ejecucion CI/CD" >> $GITHUB_STEP_SUMMARY
+          echo "| Etapa | Estado |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Flake8 (PEP 8) | ✅ Aprobado |" >> $GITHUB_STEP_SUMMARY
+          echo "| Pytest (Pruebas Unitarias) | ✅ Aprobado |" >> $GITHUB_STEP_SUMMARY
+          echo "| Script de Auditoria | ✅ Generado |" >> $GITHUB_STEP_SUMMARY
+          echo "| Artefacto de Calidad | 📦 Guardado |" >> $GITHUB_STEP_SUMMARY
