@@ -18,11 +18,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+<<<<<<< HEAD
 
+=======
+>>>>>>> e611d388cada466e10bb108a7ad5b3ff06575322
       - name: 3. Instalar herramientas QA
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest
+<<<<<<< HEAD
 
       - name: 4. Auditar codigo con Flake8
         run: |
@@ -64,3 +68,11 @@ jobs:
           name: reporte-mantenimiento-sistema
           path: reporte_mantenimiento.txt
   
+=======
+      - name: 4. Auditar codigo completo con Flake8
+        run: |
+          flake8 src/ tests/ --max-line-length=100
+      - name: 5. Ejecutar pruebas con Pytest
+        run: |
+          pytest tests/test_facturacion_pytest.py
+>>>>>>> e611d388cada466e10bb108a7ad5b3ff06575322
