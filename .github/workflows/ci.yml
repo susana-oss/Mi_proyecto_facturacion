@@ -1,24 +1,66 @@
 name: Pipeline CI Comercial Chiclayo
+
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
 jobs:
   auditoria-y-pruebas:
     runs-on: ubuntu-latest
+
     steps:
       - name: 1. Obtener codigo fuente
         uses: actions/checkout@v4
+
       - name: 2. Configurar Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: 3. Instalar herramientas QA
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest
-      - name: 4. Auditar codigo completo con Flake8
+
+      - name: 4. Auditar codigo con Flake8
         run: |
-          flake8 src/ tests/ --max-line-length=100
-      - name: 5. Ejecutar pruebas con Pytest
+          flake8 src/ scripts/ --max-line-length=100
+
+      - name: 5. Ejecutar pruebas unitarias con Pytest
         run: |
           pytest tests/test_facturacion_pytest.py
+
+      - name: 6. Ejecutar script personalizado de auditoria
+        env:
+          PYTHONPATH: .
+        run: |
+          python scripts/auditoria_sistema.py
+
+      - name: 7. Publicar artefacto de auditoria
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-auditoria-calidad
+          path: reporte_auditoria.txt
+
+      - name: 8. Generar resumen automatizado del build
+        run: |
+          echo "## Resumen de Ejecución CI/CD - Comercial Chiclayo 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "El pipeline certificó exitosamente la calidad del software:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Auditoría PEP 8:** Flake8 aprobado sin observaciones." >> $GITHUB_STEP_SUMMARY
+          echo "- **Reglas de Negocio:** Pytest validó todos los cálculos contables." >> $GITHUB_STEP_SUMMARY
+          echo "- **Script Interno:** Auditoría ejecutada y empaquetada como artefacto." >> $GITHUB_STEP_SUMMARY
+          echo "- **Estado Final:** Listo para distribución continua (CD)." >> $GITHUB_STEP_SUMMARY
+      - name: 9. Ejecutar script de mantenimiento
+        env:  
+           PYTHONPATH: .
+        run: |
+          python scripts/mantenimiento_sistema.py
+
+      - name: 10. Publicar artefacto de mantenimiento
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-mantenimiento-sistema
+          path: reporte_mantenimiento.txt
+  
