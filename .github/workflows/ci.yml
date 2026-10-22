@@ -34,7 +34,7 @@ jobs:
 
       - name: 6. Ejecutar script de auditoria interna
         run: |
-          python scripts/auditoria_sistema.py
+         PYTHONPATH= python scripts/auditoria_sistema.py
 
       - name: 7. Subir artefacto de auditoria
         uses: actions/upload-artifact@v4
